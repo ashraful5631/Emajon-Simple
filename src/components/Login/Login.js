@@ -1,10 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import useFirebase from '../../hooks/useFirebase';
+import { Link, useLocation, useHistory } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 import './Login.css'
 
 const Login = () => {
-    const { signInUsingGoogle } = useFirebase()
+    const { signInUsingGoogle } = useAuth();
+    const history = useHistory()
+    const location = useLocation()
+
+    const handelGoogleLogIn = () => {
+        signInUsingGoogle()
+            .then(result => {
+                console.log(result.user);
+                history.push(location.state?.from || '/')
+            })
+    }
     return (
         <div className='login-div'>
             <div>
@@ -18,9 +28,9 @@ const Login = () => {
                     <br />
                     <input type="submit" value="Submit" />
                 </form>
-                <p>NeW To Emajon?<Link to='/register'>Create Account</Link></p>
+                <p>NeW To Emajon Website?<Link to='/register'>Create Account</Link></p>
                 <div>.............or..............</div>
-                <button className='btn-regular' onClick={signInUsingGoogle}>Google Sign In</button>
+                <button className='btn-regular' onClick={handelGoogleLogIn}>Google Sign In</button>
             </div>
         </div>
     );
